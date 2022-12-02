@@ -5,7 +5,7 @@ import Employees from './components/Employees.vue'
 <template>
   <div class="container">
     <header>
-      <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
+      <img alt="three-sixty logo" class="logo" src="./assets/logo.png"/>
     </header>
 
     <div class="Employees">
@@ -20,6 +20,7 @@ import Employees from './components/Employees.vue'
 <style scoped>
 header {
   line-height: 1.5;
+  padding: 1rem 0;
 }
 
 .container {
@@ -35,6 +36,9 @@ header {
 
 @media (min-width: 1024px) {
   header {
+   /* Better to move these flex code to the header in global and remove it from here
+      then also remove the margin of logo from global and media query, so we will just have 
+      one code for centering */
     display: flex;
     place-items: center;
     justify-content: center;
@@ -42,6 +46,8 @@ header {
   }
 
   .logo {
+    /* I think it supposed to be (margin: 0 0 2rem 0;)
+       that means margin-bottom: 2rem; */
     margin: 0 2rem 0 0;
   }
 
