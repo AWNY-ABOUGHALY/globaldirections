@@ -20,7 +20,7 @@
       >
         <td class="text-center">{{ employee.profile.name }}</td>
         <td class="text-center">{{ employee.email }}</td>
-        <td class="text-center">{{ employee.performance_index }}</td>
+        <td class="text-center">{{ Number.isInteger(employee.performance_index*100)? employee.performance_index*100+"%": Math.round(employee.performance_index *100)+"%" }}</td>
       </tr>
     </tbody>
   </v-table>
