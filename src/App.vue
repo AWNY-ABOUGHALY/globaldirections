@@ -1,5 +1,6 @@
 <script setup>
 import Employees from './components/Employees.vue'
+import Searchbar from './components/Searchbar.vue'
 </script>
 
 <template>
@@ -7,15 +8,35 @@ import Employees from './components/Employees.vue'
     <header>
       <img alt="three-sixty logo" class="logo" src="./assets/logo.png"/>
     </header>
-    <div class="searchbar">
-      <font-awesome-icon icon="fa-solid fa-magnifying-glass" class="searchicon"/>
-      <input type="text" class="searchbtn" placeholder="Search Here"/>
-    </div>
-    <div class="Employees">
-      <Employees />
-    </div>
+    <Searchbar :filterEmployees="filterEmployees"/>
+    <Employees :employees="employees" :SearchingEmployee="SearchingEmployee" :userValue="userValue"/>
   </div>
 </template>
+
+<script>
+import axios from 'axios';
+export default {
+    data () {
+      return {
+        employees: [],
+        SearchingEmployee: [],
+        userValue: ''
+      }
+    },
+    mounted(){
+      axios.get("https://fe-task.getsandbox.com/employees")
+      .then(res=> this.employees = res.data.employees)
+    },
+    methods: {
+      filterEmployees(userValue){
+        this.userValue = userValue
+        this.SearchingEmployee = this.employees.filter((employee)=>{
+          return employee.profile.name.includes(userValue) || employee.email.includes(userValue)
+        })
+      }
+    }
+  }
+</script>
 
 <style scoped>
 header {
@@ -30,35 +51,6 @@ header {
   padding: 0 1rem;
 }
 
-.searchbar {
-  position: relative;
-  max-width: 15rem;
-  margin: 1rem 0;
-  display: flex;
-  justify-content: flex-start;
-  place-items: center;
-}
-.searchbtn {
-  width: 100%;
-  background-color: #fffae6;
-  border-radius: 1.5rem;
-  padding: 0.7rem 0.7rem 0.7rem 2.7rem;
-}
-.searchbtn::placeholder {
-  font-size: 12px;
-  font-weight: bold;
-  color: #001658;
-}
-.searchbtn:focus {
-  outline: none;
-}
-.searchicon {
-  position: absolute;
-  margin-left: 1rem;
-  color: #001658;
-  font-size: 20px;
-}
-
 /* @media (min-width: 1024px) {
   header .wrapper {
     display: flex;
@@ -69,9 +61,6 @@ header {
 @media (max-width: 575px) {
   header {
     justify-content: center;
-  }
-  .searchbar {
-    max-width: 100%;
   }
 }
 </style>
