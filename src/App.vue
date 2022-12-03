@@ -1,25 +1,48 @@
 <script setup>
 import Employees from './components/Employees.vue'
+import Searchbar from './components/Searchbar.vue'
 </script>
 
 <template>
   <div class="container">
     <header>
-      <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
+      <img alt="three-sixty logo" class="logo" src="./assets/logo.png"/>
     </header>
-
-    <div class="Employees">
-      <Employees />
-    </div>
+    <Searchbar :filterEmployees="filterEmployees"/>
+    <Employees :employees="employees" :SearchingEmployee="SearchingEmployee" :userValue="userValue"/>
   </div>
-  <main>
-
-  </main>
 </template>
+
+<script>
+import axios from 'axios';
+export default {
+    data () {
+      return {
+        employees: [],
+        SearchingEmployee: [],
+        userValue: ''
+      }
+    },
+    mounted(){
+      axios.get("https://fe-task.getsandbox.com/employees")
+      .then(res=> this.employees = res.data.employees)
+    },
+    methods: {
+      filterEmployees(userValue){
+        this.userValue = userValue
+        this.SearchingEmployee = this.employees.filter((employee)=>{
+          return employee.profile.name.includes(userValue) || employee.email.includes(userValue)
+        })
+      }
+    }
+  }
+</script>
 
 <style scoped>
 header {
-  line-height: 1.5;
+  display: flex;
+  justify-content: flex-start;
+  padding: 2.5rem 0;
 }
 
 .container {
@@ -28,27 +51,16 @@ header {
   padding: 0 1rem;
 }
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    justify-content: center;
-    background: #ccc;
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
+/* @media (min-width: 1024px) {
   header .wrapper {
     display: flex;
     place-items: flex-start;
     flex-wrap: wrap;
+  }
+} */
+@media (max-width: 575px) {
+  header {
+    justify-content: center;
   }
 }
 </style>
